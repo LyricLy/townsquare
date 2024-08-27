@@ -12,6 +12,7 @@
     />
     <h3>
       Night Order
+      <br />
       <font-awesome-icon icon="cloud-moon" />
       {{ edition.name || "Custom Script" }}
     </h3>
@@ -187,11 +188,19 @@ export default {
   }
 }
 
+@media (orientation: portrait) {
+  .toggle {
+    width: 20px;
+    height: 15px;
+  }
+}
+
 h3 {
   margin: 0 40px;
   svg {
     vertical-align: middle;
   }
+  line-height: 90%;
 }
 
 h4 {
@@ -289,6 +298,10 @@ ul {
           text-decoration: line-through;
         }
       }
+      @media (orientation: portrait) {
+        font-size: 16px;
+        line-height: 16px;
+      }
     }
     .reminder {
       position: fixed;
@@ -346,6 +359,11 @@ ul {
     padding: 5px 10px;
     border-radius: 0;
     text-align: center;
+
+    @media (orientation: portrait) {
+      font-size: 16px;
+      line-height: 16px;
+    }
   }
   .name {
     flex-grow: 1;
