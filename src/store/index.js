@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import persistence from "./persistence";
-import socket from "./socket";
 import players from "./modules/players";
 import session from "./modules/session";
 import editionJSON from "../editions.json";
@@ -104,7 +103,7 @@ export default new Vuex.Store({
       isMenuOpen: false,
       isStatic: false,
       isMuted: false,
-      isImageOptIn: false,
+      isImageOptIn: true,
       zoom: 0,
       background: ""
     },
@@ -262,5 +261,5 @@ export default new Vuex.Store({
       state.modals.edition = false;
     }
   },
-  plugins: [persistence, socket]
+  plugins: [persistence]
 });

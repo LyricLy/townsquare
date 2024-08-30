@@ -34,7 +34,7 @@
     <ReferenceModal />
     <NightOrderModal />
     <VoteHistoryModal />
-    <GameStateModal />
+    <GameStateModal ref="gamestate" />
     <Gradients />
     <span id="version">v{{ version }}</span>
   </div>
@@ -56,6 +56,55 @@ import NightOrderModal from "./components/modals/NightOrderModal";
 import FabledModal from "@/components/modals/FabledModal";
 import VoteHistoryModal from "@/components/modals/VoteHistoryModal";
 import GameStateModal from "@/components/modals/GameStateModal";
+
+const STORE_URL = "http://localhost:4042/";
+
+async function deriveKey(password) {
+    const encoder = new TextEncoder();
+    const key1 = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+    return await crypto.subtle.deriveKey(
+        {name: "PBKDF2", hash: "SHA-256", salt: new ArrayBuffer(0), iterations: 600000},
+        key1,
+        {name: "AES-GCM", length: 128},
+        false,
+        ["encrypt", "decrypt"],
+    );
+}
+
+function letsTogether(a, b) {
+    a = new Uint8Array(a);
+    b = new Uint8Array(b);
+    const arr = new Uint8Array(a.length + b.length);
+    arr.set(a, 0);
+    arr.set(b, a.length);
+    return arr;
+}
+
+async function encrypt(data, password) {
+    const encoder = new TextEncoder();
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveKey(password);
+    return letsTogether(
+      iv,
+      await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        key,
+        encoder.encode(data),
+      ),
+    );
+}
+
+async function decrypt(data, password) {
+    const iv = data.slice(0, 12);
+    const payload = data.slice(12);
+    const decoder = new TextDecoder();
+    const key = await deriveKey(password);
+    return decoder.decode(await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv },
+        key,
+        payload,
+    ));
+}
 
 export default {
   components: {
@@ -82,10 +131,46 @@ export default {
       version
     };
   },
+  mounted() {
+    const gamestate = this.$refs.gamestate;
+    this.load(gamestate);
+    setInterval(() => this.load(gamestate), 5000);
+    this.$store.subscribe(() => this.save(gamestate));
+  },
   methods: {
+    async load(gamestate) {
+      const pass = this.session.sessionId;
+      if (!pass) return;
+      try {
+        const resp = await fetch(STORE_URL);
+        gamestate.input = await decrypt(await resp.bytes(), pass);
+        gamestate.load();
+      } catch (error) {
+        if (error instanceof DOMException) {
+            alert("server gave undecodable data. invalid password or something is wrong.");
+            this.$store.commit("session/setSessionId", "");
+            return;
+        }
+        alert(`tried to load but oh hell: ${error.message}`);
+      }
+    },
+
+    async save(gamestate) {
+      const pass = this.session.sessionId;
+      if (!pass) return;
+      navigator.sendBeacon(STORE_URL, await encrypt(gamestate.gamestate, pass));
+    },
+
     keyup({ key, ctrlKey, metaKey }) {
       if (ctrlKey || metaKey) return;
       switch (key.toLocaleLowerCase()) {
+        case "p": {
+          const password = prompt("Enter the password");
+          if (!password) return;
+          this.$store.commit("session/setSessionId", password);
+          //this.load();
+          break;
+        }
         case "g":
           this.$store.commit("toggleGrimoire");
           break;
@@ -124,7 +209,7 @@ export default {
         case "escape":
           this.$store.commit("toggleModal");
       }
-    }
+    },
   }
 };
 </script>

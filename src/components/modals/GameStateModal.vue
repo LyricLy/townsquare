@@ -101,7 +101,6 @@ export default {
             }))
           );
         }
-        this.toggleModal("gameState");
       } catch (e) {
         alert("Unable to parse JSON: " + e);
       }

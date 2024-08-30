@@ -1,6 +1,6 @@
 module.exports = store => {
   const updatePagetitle = isPublic =>
-    (document.title = `Blood on the Clocktower ${
+    (document.title = `Esolangs ${
       isPublic ? "Town Square" : "Grimoire"
     }`);
 

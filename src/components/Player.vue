@@ -929,6 +929,10 @@ li.move:not(.from) .player .overlay svg.move {
   }
 }
 
+.icon {
+    transform: translateY(-5px);
+}
+
 .circle .reminderHoverTarget {
   opacity: 0;
   width: calc(50% + 8px);

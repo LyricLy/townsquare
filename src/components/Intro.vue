@@ -3,16 +3,15 @@
     <img src="static/apple-icon.png" alt="" class="logo" />
     <div>
       Welcome to the (unofficial)
-      <b>Virtual Town Square and Grimoire</b> for Blood on the Clocktower!
+      <b>Virtual Town Square and Grimoire</b> for Esolangs Blood on the Clocktower!
       Please add more players through the
       <span class="button" @click="toggleMenu">
         <font-awesome-icon icon="cog" /> Menu
       </span>
-      on the top right or by pressing <b>[A]</b>. You can also join a game
-      session by pressing <b>[J]</b>.<br />
+      on the top right or by pressing <b>[A]</b>.
       <div class="footer">
         This project is free and open source and can be found on
-        <a href="https://github.com/bra1n/townsquare" target="_blank">GitHub</a
+        <a href="https://github.com/LyricLy/townsquare" target="_blank">GitHub</a
         >. It is not affiliated with The Pandemonium Institute. "Blood on the
         Clocktower" is a trademark of Steven Medway and The Pandemonium
         Institute.
@@ -87,9 +86,7 @@ export default {
     width: 25vh;
     margin-bottom: 2vh;
     max-width: 192px;
-    border-radius: 50%;
-    box-shadow: 0 0 10px black;
-    border: 3px solid black;
+    filter: drop-shadow(0 0 4px black);
   }
   .footer {
     font-size: 60%;

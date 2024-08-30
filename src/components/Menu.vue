@@ -13,29 +13,11 @@
       <font-awesome-icon icon="book-dead" />
       {{ session.voteHistory.length }}
     </span>
-    <span
-      class="session"
-      :class="{
-        spectator: session.isSpectator,
-        reconnecting: session.isReconnecting
-      }"
-      v-if="session.sessionId"
-      @click="leaveSession"
-      :title="
-        `${session.playerCount} other players in this session${
-          session.ping ? ' (' + session.ping + 'ms latency)' : ''
-        }`
-      "
-    >
-      <font-awesome-icon icon="broadcast-tower" />
-      {{ session.playerCount }}
-    </span>
     <div class="menu" :class="{ open: grimoire.isMenuOpen }">
       <font-awesome-icon icon="cog" @click="toggleMenu" />
       <ul>
         <li class="tabs" :class="tab">
           <font-awesome-icon icon="book-open" @click="tab = 'grimoire'" />
-          <font-awesome-icon icon="broadcast-tower" @click="tab = 'session'" />
           <font-awesome-icon
             icon="users"
             v-if="!session.isSpectator"
@@ -87,16 +69,6 @@
             Background image
             <em><font-awesome-icon icon="image"/></em>
           </li>
-          <li v-if="!edition.isOfficial" @click="imageOptIn">
-            <small>Show Custom Images</small>
-            <em
-              ><font-awesome-icon
-                :icon="[
-                  'fas',
-                  grimoire.isImageOptIn ? 'check-square' : 'square'
-                ]"
-            /></em>
-          </li>
           <li @click="toggleStatic">
             Disable Animations
             <em
@@ -111,44 +83,6 @@
                 :icon="['fas', grimoire.isMuted ? 'volume-mute' : 'volume-up']"
             /></em>
           </li>
-        </template>
-
-        <template v-if="tab === 'session'">
-          <!-- Session -->
-          <li class="headline" v-if="session.sessionId">
-            {{ session.isSpectator ? "Playing" : "Hosting" }}
-          </li>
-          <li class="headline" v-else>
-            Live Session
-          </li>
-          <template v-if="!session.sessionId">
-            <li @click="hostSession">Host (Storyteller)<em>[H]</em></li>
-            <li @click="joinSession">Join (Player)<em>[J]</em></li>
-          </template>
-          <template v-else>
-            <li v-if="session.ping">
-              Delay to {{ session.isSpectator ? "host" : "players" }}
-              <em>{{ session.ping }}ms</em>
-            </li>
-            <li @click="copySessionUrl">
-              Copy player link
-              <em><font-awesome-icon icon="copy"/></em>
-            </li>
-            <li v-if="!session.isSpectator" @click="distributeRoles">
-              Send Characters
-              <em><font-awesome-icon icon="theater-masks"/></em>
-            </li>
-            <li
-              v-if="session.voteHistory.length || !session.isSpectator"
-              @click="toggleModal('voteHistory')"
-            >
-              Vote history<em>[V]</em>
-            </li>
-            <li @click="leaveSession">
-              Leave Session
-              <em>{{ session.sessionId }}</em>
-            </li>
-          </template>
         </template>
 
         <template v-if="tab === 'players' && !session.isSpectator">
@@ -215,11 +149,11 @@
             </em>
           </li>
           <li>
-            <a href="https://github.com/bra1n/townsquare" target="_blank">
+            <a href="https://github.com/LyricLy/townsquare" target="_blank">
               Source code
             </a>
             <em>
-              <a href="https://github.com/bra1n/townsquare" target="_blank">
+              <a href="https://github.com/LyricLy/townsquare" target="_blank">
                 <font-awesome-icon :icon="['fab', 'github']" />
               </a>
             </em>
@@ -249,24 +183,6 @@ export default {
       if (background || background === "") {
         this.$store.commit("setBackground", background);
       }
-    },
-    hostSession() {
-      if (this.session.sessionId) return;
-      const sessionId = prompt(
-        "Enter a channel number / name for your session",
-        Math.round(Math.random() * 10000)
-      );
-      if (sessionId) {
-        this.$store.commit("session/clearVoteHistory");
-        this.$store.commit("session/setSpectator", false);
-        this.$store.commit("session/setSessionId", sessionId);
-        this.copySessionUrl();
-      }
-    },
-    copySessionUrl() {
-      const url = window.location.href.split("#")[0];
-      const link = url + "#" + this.session.sessionId;
-      navigator.clipboard.writeText(link);
     },
     distributeRoles() {
       if (this.session.isSpectator) return;
@@ -495,7 +411,6 @@ export default {
         &.grimoire .fa-book-open,
         &.players .fa-users,
         &.characters .fa-theater-masks,
-        &.session .fa-broadcast-tower,
         &.help .fa-question {
           background: linear-gradient(
             to bottom,

@@ -1,4 +1,6 @@
 .idea
 node_modules
 dist
+new_assets
+server/state.json
 *.pem
