@@ -14,5 +14,3 @@ def write_data():
     with open("state.json", "wb") as f:
         f.write(flask.request.get_data())
     return "", 204
-
-app.run("localhost", 4042)
