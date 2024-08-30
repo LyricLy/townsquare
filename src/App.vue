@@ -57,7 +57,7 @@ import FabledModal from "@/components/modals/FabledModal";
 import VoteHistoryModal from "@/components/modals/VoteHistoryModal";
 import GameStateModal from "@/components/modals/GameStateModal";
 
-const STORE_URL = "http://localhost:4042/";
+const STORE_URL = "https://bc.esolangs.gay/state";
 
 async function deriveKey(password) {
     const encoder = new TextEncoder();
