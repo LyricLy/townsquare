@@ -158,7 +158,11 @@ export default {
     async save(gamestate) {
       const pass = this.session.sessionId;
       if (!pass) return;
-      navigator.sendBeacon(STORE_URL, await encrypt(gamestate.gamestate, pass));
+      const data = await encrypt(gamestate.gamestate, pass);
+      await fetch(STORE_URL, {
+        method: "POST",
+        body: data,
+      });
     },
 
     keyup({ key, ctrlKey, metaKey }) {
