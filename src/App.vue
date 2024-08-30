@@ -20,6 +20,10 @@
       autoplay
       loop
     ></video>
+    <dialog ref="dialog">
+      server gave undecodable data. invalid password or something is wrong... <a ref="dialoglink">download state</a><br>
+      <form method="dialog"><button>OK</button></form>
+    </dialog>
     <div class="backdrop"></div>
     <transition name="blur">
       <Intro v-if="!players.length"></Intro>
@@ -106,6 +110,8 @@ async function decrypt(data, password) {
     ));
 }
 
+let lastTap = 0;
+
 export default {
   components: {
     GameStateModal,
@@ -135,19 +141,23 @@ export default {
     const gamestate = this.$refs.gamestate;
     this.load(gamestate);
     setInterval(() => this.load(gamestate), 5000);
-    this.$store.subscribe(() => this.save(gamestate));
+    this.$store.subscribe((mutation) => {
+        if (mutation.type.startsWith("players/") || mutation.type.startsWith("set")) this.save(gamestate)
+    });
   },
   methods: {
     async load(gamestate) {
+      lastTap = Date.now();
       const pass = this.session.sessionId;
       if (!pass) return;
       try {
         const resp = await fetch(STORE_URL);
-        gamestate.input = await decrypt(await resp.bytes(), pass);
+        gamestate.input = await decrypt(await resp.arrayBuffer(), pass);
         gamestate.load();
       } catch (error) {
         if (error instanceof DOMException) {
-            alert("server gave undecodable data. invalid password or something is wrong.");
+            this.$refs.dialog.showModal();
+            this.$refs.dialoglink.href = URL.createObjectURL(new Blob([await encrypt(gamestate.gamestate, pass)]));
             this.$store.commit("session/setSessionId", "");
             return;
         }
@@ -156,6 +166,7 @@ export default {
     },
 
     async save(gamestate) {
+      if (lastTap + 50 > Date.now()) return;
       const pass = this.session.sessionId;
       if (!pass) return;
       const data = await encrypt(gamestate.gamestate, pass);
@@ -170,9 +181,9 @@ export default {
       switch (key.toLocaleLowerCase()) {
         case "p": {
           const password = prompt("Enter the password");
-          if (!password) return;
           this.$store.commit("session/setSessionId", password);
-          //this.load();
+          if (!password) return;
+          this.load(this.$refs.gamestate);
           break;
         }
         case "g":
