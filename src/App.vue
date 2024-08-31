@@ -140,7 +140,6 @@ export default {
   mounted() {
     const gamestate = this.$refs.gamestate;
     this.load(gamestate);
-    setInterval(() => this.load(gamestate), 5000);
     this.$store.subscribe((mutation) => {
         if (mutation.type.startsWith("players/") || mutation.type.startsWith("set")) this.save(gamestate)
     });
