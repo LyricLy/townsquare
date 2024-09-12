@@ -138,6 +138,10 @@
             Game State JSON
             <em><font-awesome-icon icon="file-code"/></em>
           </li>
+          <li @click="funny()">
+            Enter Password
+            <em>[P]</em>
+          </li>
           <li>
             <a href="https://discord.gg/Gd7ybwWbFk" target="_blank">
               Join Discord
@@ -254,6 +258,9 @@ export default {
       if (confirm("Are you sure you want to remove all player roles?")) {
         this.$store.dispatch("players/clearRoles");
       }
+    },
+    funny() {
+      document.body.children[0].dispatchEvent(new KeyboardEvent('keyup', {key: 'p'}));
     },
     toggleNight() {
       this.$store.commit("toggleNight");
