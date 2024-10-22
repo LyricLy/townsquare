@@ -12,7 +12,7 @@ import jinxesJSON from "../hatred.json";
 Vue.use(Vuex);
 
 // helper functions
-const clean = id => id.toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+const clean = (id) => id.toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
 
 const getRolesByEdition = (edition = editionJSON[0]) => {
   return new Map(
@@ -23,21 +23,19 @@ const getRolesByEdition = (edition = editionJSON[0]) => {
   );
 };
 
-const firstNightOrder = nightJSON.firstNight.map(clean);
-const getFirstNightOrder = (name) => {
+const getFirstNightOrder = (id) => {
   // -1 will be raised to 0, others will be 1 or greater.
-  return firstNightOrder.indexOf(clean(name)) + 1;
+  return nightJSON.firstNight.indexOf(id) + 1;
 };
 
-const otherNightOrder = nightJSON.firstNight.map(clean);
-const getOtherNightOrder = (name) => {
+const getOtherNightOrder = (id) => {
   // -1 will be raised to 0, others will be 1 or greater.
-  return otherNightOrder.indexOf(clean(name)) + 1;
+  return nightJSON.otherNight.indexOf(id) + 1;
 };
 
 const rolesFormatted = rolesJSON.map(role => {
-  role.firstNight = getFirstNightOrder(role.name);
-  role.otherNight = getOtherNightOrder(role.name);
+  role.firstNight = getFirstNightOrder(role.id);
+  role.otherNight = getOtherNightOrder(role.id);
   return role
 });
 
@@ -177,6 +175,8 @@ export default new Vuex.Store({
       });
       return customRoles;
     },
+    getFirstNightOrder: () => getFirstNightOrder,
+    getOtherNightOrder: () => getOtherNightOrder,
     rolesJSONbyId: () => rolesJSONbyId
   },
   mutations: {

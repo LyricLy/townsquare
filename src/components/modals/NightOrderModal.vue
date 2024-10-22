@@ -116,7 +116,7 @@ export default {
           {
             id: "evil",
             name: "Minion info",
-            firstNight: 5,
+            firstNight: this.$store.getters.getFirstNightOrder("minion"),
             team: "minion",
             players: this.players.filter(p => p.role.team === "minion"),
             firstNightReminder:
@@ -126,7 +126,7 @@ export default {
           {
             id: "evil",
             name: "Demon info & bluffs",
-            firstNight: 8,
+            firstNight: this.$store.getters.getFirstNightOrder("demon"),
             team: "demon",
             players: this.players.filter(p => p.role.team === "demon"),
             firstNightReminder:
