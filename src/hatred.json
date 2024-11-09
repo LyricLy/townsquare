@@ -14,6 +14,18 @@
       {
         "id": "Cannibal",
         "reason": "If the Cannibal gains the Butler ability, the Cannibal learns this."
+      },
+      {
+        "id": "Juggler",
+        "reason": "If the Juggler guesses on their first day and dies by execution, tonight the living Cannibal learns how many guesses the Juggler got correct."
+      },
+      {
+        "id": "Zealot",
+        "reason": "If the Cannibal gains the Zealot ability, the Cannibal learns this."
+      },
+      {
+        "id": "Poppy Grower",
+        "reason": "If the Cannibal eats the Poppy Grower, then dies or loses the Poppy Grower ability, the Demon and Minions learn each other that night."
       }
     ]
   },
@@ -112,15 +124,14 @@
       {
         "id": "Scarlet Woman",
         "reason": "If there are 5 or more players alive and the player holding the Lil' Monsta token dies, the Scarlet Woman is given the Lil' Monsta token tonight."
-      }
-    ]
-  },
-  {
-    "id": "Lycanthrope",
-    "hatred": [
+      },
       {
-        "id": "Gambler",
-        "reason": "If the Lycanthrope is alive and the Gambler kills themself at night, no other players can die tonight."
+        "id": "Vizier",
+        "reason": "The Vizier can die by execution if they are babysitting Lil' Monsta."
+      },
+      {
+        "id": "Hatter",
+        "reason": "If a Demon chooses Lil' Monsta, they also choose a Minion to become and babysit Lil' Monsta tonight."
       }
     ]
   },
@@ -253,6 +264,52 @@
       {
         "id": "Golem",
         "reason": "If The Golem nominates Riot, the Riot player does not die."
+      },
+      {
+        "id": "heretic",
+        "reason": "If the Lleech has poisoned the Heretic then the Lleech dies, the Heretic remains poisoned."
+      }
+    ]
+  },
+  {
+    "id": "Kazali",
+    "hatred": [
+      {
+        "id": "Bounty Hunter",
+        "reason": "An evil Townsfolk is only created if the Bounty Hunter is still in play after the Kazali acts."
+      },
+      {
+        "id": "Goon",
+        "reason": "The Kazali can choose that the Goon player is one of their evil Minions."
+      },
+      {
+        "id": "Marionette",
+        "reason": "If the Kazali chooses to create a Marionette, they must choose one of their neighbors."
+      },
+      {
+        "id": "Huntsman",
+        "reason": "If the Kazali chooses the Damsel to become a Minion, and a Huntsman is in play, a good player becomes the Damsel."
+      },
+      {
+        "id": "Choirboy",
+        "reason": "The Kazali can not choose the King to become a Minion if a Choirboy is in play."
+      },
+      {
+        "id": "Soldier",
+        "reason": "The Kazali can choose that the Soldier player is one of their evil Minions."
+      }
+    ]
+  },
+  {
+    "id": "Riot",
+    "hatred": [
+      {
+        "id": "Engineer",
+        "reason": "Riot and the Engineer can not both be in play at the start of the game. If the Engineer creates Riot, the evil players become Riot."
+      },
+      {
+        "id": "Golem",
+        "reason": "If the Golem nominates Riot, the Riot player does not die."
       },
       {
         "id": "Snitch",
